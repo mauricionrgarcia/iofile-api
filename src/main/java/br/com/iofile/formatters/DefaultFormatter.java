@@ -17,6 +17,7 @@ public class DefaultFormatter implements IFormatterValues<String> {
 	 * @see br.com.iofile.interfaces.IFormatterValues#getValue(java.lang.String,
 	 * java.lang.String)
 	 */
+	@Override
 	public String getValue(String mask, String value) throws Exception {
 		return value;
 	}
@@ -27,18 +28,20 @@ public class DefaultFormatter implements IFormatterValues<String> {
 	 * @see br.com.iofile.interfaces.IFormatterValues#format(java.lang.String,
 	 * java.io.Serializable)
 	 */
+	@Override
 	public String format(String mask, String value) throws Exception {
 		return value;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.iofile.interfaces.IFormatterValues#format(java.lang.String,
 	 * java.lang.Object)
 	 */
+	@Override
 	public String format(String mask, Object obj) throws Exception {
-		return obj.toString();
+		return obj == null ? "" : obj.toString();
 	}
 
 }

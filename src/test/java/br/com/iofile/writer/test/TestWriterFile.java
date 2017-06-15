@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import br.com.iofile.example.beans.BodyBean;
 import br.com.iofile.example.beans.HeaderBean;
+import br.com.iofile.util.Period;
 import br.com.iofile.writer.WriterIOFile;
 
 /**
@@ -41,6 +42,7 @@ public class TestWriterFile {
 
 		HeaderBean header = new HeaderBean();
 		header.setName("Mauricio");
+		header.setDtPeriod(new Period(new Date(), new Date()));
 
 		long initTime = Calendar.getInstance().getTimeInMillis();
 		new WriterIOFile("test.xlsx", header, objects);

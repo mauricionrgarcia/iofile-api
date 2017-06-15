@@ -161,6 +161,7 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 				IFormatterValues<?> formatted = values.formatted().newInstance();
 				String value = formatted.format(values.pattern(), valueObject);
 				Integer position = values.position();
+
 				writter.print(position, value);
 			}
 			i++;

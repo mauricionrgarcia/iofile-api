@@ -59,6 +59,23 @@ public class HeaderPrint implements Serializable {
 	 *
 	 * @param position
 	 * @param row
+	 * @param value
+	 * @param headerName
+	 */
+	public HeaderPrint(Integer position, Integer row, String value) {
+		super();
+		this.position = position;
+		this.positionHeader = position;
+		this.row = row;
+		this.rowHeader = row;
+		this.value = value;
+	}
+
+	/**
+	 * Construtor
+	 *
+	 * @param position
+	 * @param row
 	 * @param positionHeader
 	 * @param rowHeader
 	 * @param value

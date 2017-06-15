@@ -11,9 +11,10 @@ import java.util.Map.Entry;
 
 import javax.imageio.IIOException;
 
+import br.com.iofile.annotations.HeaderBean;
 import br.com.iofile.annotations.HeaderValues;
 import br.com.iofile.annotations.Values;
-import br.com.iofile.enums.HeaderEnumStrategyEnum;
+import br.com.iofile.enums.HeaderStrategyEnum;
 import br.com.iofile.interfaces.IBean;
 import br.com.iofile.interfaces.IFormatterValues;
 import br.com.iofile.interfaces.IHeaderStrategy;
@@ -126,9 +127,14 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 
 		Writer writter = new WriterExcelFile(this.fileName);
 
-		IHeaderStrategy headerStrategy = HeaderEnumStrategyEnum.DEFAULT.getStrategy();
-
+		HeaderBean headerBean = this.header.getClass().getAnnotation(HeaderBean.class);
 		int i = 0;
+
+		IHeaderStrategy headerStrategy = HeaderStrategyEnum.DEFAULT.getStrategy();
+		if (headerBean != null) {
+			i = headerBean.size();
+			headerStrategy = headerBean.headerStrategy().getStrategy();
+		}
 
 		// header
 		for (Entry<Integer, Field> entry : this.mapFields.get(this.header.getClass()).entrySet()) {
@@ -144,21 +150,17 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 			writter.print(headerStrategy.processHeader(position, row, value, values.headerName()));
 		}
 
-		i = 4;
 		for (B interator : this.values) {
 
 			writter.createRow(i);
 
 			for (Entry<Integer, Field> entry : this.mapFields.get(interator.getClass()).entrySet()) {
-
 				Field f = entry.getValue();
 				Object valueObject = this.mapMethod.get(f).invoke(interator);
 				Values values = f.getAnnotation(Values.class);
 				IFormatterValues<?> formatted = values.formatted().newInstance();
-
 				String value = formatted.format(values.pattern(), valueObject);
 				Integer position = values.position();
-
 				writter.print(position, value);
 			}
 			i++;

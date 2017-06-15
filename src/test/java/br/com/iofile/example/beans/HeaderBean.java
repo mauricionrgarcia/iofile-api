@@ -1,7 +1,9 @@
 package br.com.iofile.example.beans;
 
 import br.com.iofile.annotations.HeaderValues;
+import br.com.iofile.enums.HeaderStrategyEnum;
 import br.com.iofile.interfaces.IBean;
+import br.com.iofile.util.Period;
 
 /**
  * Classe que reprsenta o header
@@ -10,6 +12,7 @@ import br.com.iofile.interfaces.IBean;
  * @version
  * @sinse 15/06/2017 16:55:29
  */
+@br.com.iofile.annotations.HeaderBean(size = 4, headerStrategy = HeaderStrategyEnum.CONCAT)
 public class HeaderBean implements IBean {
 
 	/**
@@ -22,12 +25,12 @@ public class HeaderBean implements IBean {
 	 */
 	@HeaderValues(position = 0, row = 0, headerName = "Nome: ")
 	private String name;
-	//
-	// /**
-	// * Atributo que representa o filtro pelo periodo
-	// */
-	// @HeaderValues(position = 1, row = 0, headerName = "Período: ")
-	// private Period dtPeriod;
+
+	/**
+	 * Atributo que representa o filtro pelo periodo
+	 */
+	@HeaderValues(position = 1, row = 0, headerName = "Período: ")
+	private Period dtPeriod;
 
 	/**
 	 * @return the name

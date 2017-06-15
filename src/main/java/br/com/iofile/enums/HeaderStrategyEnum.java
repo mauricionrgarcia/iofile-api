@@ -1,6 +1,7 @@
 package br.com.iofile.enums;
 
 import br.com.iofile.interfaces.IHeaderStrategy;
+import br.com.iofile.util.ConcatHeaderStrategy;
 import br.com.iofile.util.DefaultHeaderStrategy;
 
 /**
@@ -11,12 +12,19 @@ import br.com.iofile.util.DefaultHeaderStrategy;
  * @version
  * @sinse 15/06/2017 17:42:52
  */
-public enum HeaderEnumStrategyEnum {
+public enum HeaderStrategyEnum {
 
 	DEFAULT {
 		@Override
 		public IHeaderStrategy getStrategy() {
 			return new DefaultHeaderStrategy();
+		}
+	},
+
+	CONCAT {
+		@Override
+		public IHeaderStrategy getStrategy() {
+			return new ConcatHeaderStrategy();
 		}
 	};
 

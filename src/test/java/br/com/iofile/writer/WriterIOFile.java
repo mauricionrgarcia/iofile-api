@@ -3,6 +3,7 @@ package br.com.iofile.writer;
 import java.util.List;
 
 import br.com.iofile.example.beans.BodyBean;
+import br.com.iofile.example.beans.HeaderBean;
 
 /**
  * Implementação para defir a criação de arqivo de BodyBean
@@ -11,16 +12,17 @@ import br.com.iofile.example.beans.BodyBean;
  * @version
  * @sinse 15/06/2017 13:52:01
  */
-public class WriterIOFile extends AbstractWritterFileIntegration<BodyBean> {
+public class WriterIOFile extends AbstractWritterFileIntegration<HeaderBean, BodyBean> {
 
 	/**
 	 * Construtor
 	 *
 	 * @param fileName nome do arquivo
+	 * @param header header
 	 * @param objects lista de objetos
 	 * @throws Exception exception
 	 */
-	public WriterIOFile(String fileName, List<BodyBean> objects) throws Exception {
-		super(fileName, objects);
+	public WriterIOFile(String fileName, HeaderBean header, List<BodyBean> objects) throws Exception {
+		super(fileName, header, objects);
 	}
 }

@@ -9,6 +9,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import br.com.iofile.interfaces.Writer;
+import br.com.iofile.util.HeaderPrint;
 
 /**
  * Classe responsavel por criar arquivos com extensão xlsx
@@ -34,7 +35,7 @@ public class WriterExcelFile implements Writer {
 	/**
 	 * HSSFSheet firstSheet
 	 */
-	private HSSFSheet firstSheet;
+	private HSSFSheet sheet;
 	/**
 	 * HSSFRow row
 	 */
@@ -47,6 +48,7 @@ public class WriterExcelFile implements Writer {
 	 * @return {@link Writer}
 	 * @throws Exception
 	 */
+	@Override
 	public Writer newInstance(String fileName) throws Exception {
 		WriterExcelFile r = new WriterExcelFile(fileName);
 		return r;
@@ -63,22 +65,49 @@ public class WriterExcelFile implements Writer {
 		init();
 	}
 
+	/**
+	 * Inicializa as variaveis
+	 *
+	 * @throws Exception
+	 */
 	private void init() throws Exception {
 		this.fos = new FileOutputStream(new File(this.fileName));
 		this.workbook = new HSSFWorkbook();
-		this.firstSheet = this.workbook.createSheet("Aba1");
+		this.sheet = this.workbook.createSheet("Aba1");
 	}
 
+	@Override
 	public void createRow(Integer i) {
-		this.row = this.firstSheet.createRow(i);
+		this.row = this.sheet.createRow(i);
 	}
 
+	@Override
 	public void print(Integer position, String value) {
 		this.row.createCell(position).setCellValue(value);
 	}
 
+	@Override
 	public void finish() throws IOException {
 		this.workbook.write(this.fos);
+	}
+
+	@Override
+	public void print(HeaderPrint header) {
+
+		this.row = this.sheet.getRow(header.getRow());
+
+		if (this.row == null) {
+			createRow(header.getRow());
+		}
+		print(header.getPosition(), header.getValue());
+
+		this.row = this.sheet.getRow(header.getRowHeader());
+
+		if (this.row == null) {
+			createRow(header.getRowHeader());
+		}
+		print(header.getPositionHeader(), header.getHeaderName());
+
 	}
 
 }

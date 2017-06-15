@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import br.com.iofile.example.beans.BodyBean;
+import br.com.iofile.example.beans.HeaderBean;
 import br.com.iofile.writer.WriterIOFile;
 
 /**
@@ -27,7 +28,7 @@ public class TestWriterFile {
 	@Test
 	public void test() throws Exception {
 
-		List<BodyBean> objects = new ArrayList<BodyBean>();
+		List<BodyBean> objects = new ArrayList<>();
 		BodyBean bean = new BodyBean();
 		bean.setIdentification("123");
 		bean.setName("Cada da Massa");
@@ -38,8 +39,11 @@ public class TestWriterFile {
 		bean.setValor(2.5);
 		objects.add(bean);
 
+		HeaderBean header = new HeaderBean();
+		header.setName("Mauricio");
+
 		long initTime = Calendar.getInstance().getTimeInMillis();
-		new WriterIOFile("test.xlsx", objects);
+		new WriterIOFile("test.xlsx", header, objects);
 		long finalTime = Calendar.getInstance().getTimeInMillis();
 
 		long time = finalTime - initTime;

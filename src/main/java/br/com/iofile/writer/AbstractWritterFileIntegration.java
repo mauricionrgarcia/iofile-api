@@ -5,16 +5,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.imageio.IIOException;
 
+import br.com.iofile.annotations.HeaderValues;
 import br.com.iofile.annotations.Values;
+import br.com.iofile.enums.HeaderEnumStrategyEnum;
 import br.com.iofile.interfaces.IBean;
 import br.com.iofile.interfaces.IFormatterValues;
+import br.com.iofile.interfaces.IHeaderStrategy;
 import br.com.iofile.interfaces.Writer;
 import br.com.iofile.util.Util;
 
@@ -24,16 +26,21 @@ import br.com.iofile.util.Util;
  * @author <a href="mailto:mauricionrgarcia@gmail.com">Mauricio Garcia</a>
  * @version 1
  * @sinse 15/06/2017 12:40:33
+ * @param <H> {@link IBean} que representa o header do arquivo
  * @param <B> {@link IBean} que representa o corpo do arquivo
  */
-public abstract class AbstractWritterFileIntegration<B extends IBean> {
+public abstract class AbstractWritterFileIntegration<H extends IBean, B extends IBean> {
 
 	/**
 	 * Atributo BEAN_BODY representa a posição da classe no generics
 	 */
-	private static final Integer BEAN_BODY = 0;
+	@SuppressWarnings("unused")
+	private static final Integer BEAN_HEADER = 0;
 
-	private List<B> bodys;
+	/**
+	 * Atributo BEAN_BODY representa a posição da classe no generics
+	 */
+	private static final Integer BEAN_BODY = 1;
 
 	/**
 	 * Atributo que representa o nome do arquivo gerado
@@ -56,16 +63,22 @@ public abstract class AbstractWritterFileIntegration<B extends IBean> {
 	private List<B> values;
 
 	/**
+	 * Representa o filtro
+	 */
+	private H header;
+
+	/**
 	 *
 	 * Construtor padrão
 	 *
 	 * @param fileName full path file
-	 * @param charSet charSet
+	 * @param header Filtro de pesquisa utilizado
 	 * @throws Exception
 	 */
-	public AbstractWritterFileIntegration(String fileName, List<B> objects) throws Exception {
+	public AbstractWritterFileIntegration(String fileName, H header, List<B> objects) throws Exception {
 		this.fileName = fileName;
 		this.values = objects;
+		this.header = header;
 		this.init();
 	}
 
@@ -88,10 +101,8 @@ public abstract class AbstractWritterFileIntegration<B extends IBean> {
 	@SuppressWarnings("unchecked")
 	private void constructFilds() throws Exception {
 
-		this.mapFields = new HashMap<Class<? extends IBean>, HashMap<Integer, Field>>();
-		this.mapMethod = new HashMap<Field, Method>();
-
-		this.bodys = new LinkedList<B>();
+		this.mapFields = new HashMap<>();
+		this.mapMethod = new HashMap<>();
 
 		Type t = this.getClass().getGenericSuperclass();
 		if (!ParameterizedType.class.isAssignableFrom(t.getClass())) {
@@ -100,6 +111,7 @@ public abstract class AbstractWritterFileIntegration<B extends IBean> {
 
 		for (Type type : ((ParameterizedType) t).getActualTypeArguments()) {
 			loadFieldsValid(((Class<? extends IBean>) type).newInstance());
+			loadHeader(((Class<? extends IBean>) type).newInstance());
 		}
 
 	}
@@ -114,8 +126,25 @@ public abstract class AbstractWritterFileIntegration<B extends IBean> {
 
 		Writer writter = new WriterExcelFile(this.fileName);
 
+		IHeaderStrategy headerStrategy = HeaderEnumStrategyEnum.DEFAULT.getStrategy();
+
 		int i = 0;
 
+		// header
+		for (Entry<Integer, Field> entry : this.mapFields.get(this.header.getClass()).entrySet()) {
+			Field f = entry.getValue();
+			Object valueObject = this.mapMethod.get(f).invoke(this.header);
+			HeaderValues values = f.getAnnotation(HeaderValues.class);
+			IFormatterValues<?> formatted = values.formatted().newInstance();
+
+			String value = formatted.format(values.pattern(), valueObject);
+			Integer position = values.position();
+			Integer row = values.row();
+
+			writter.print(headerStrategy.processHeader(position, row, value, values.headerName()));
+		}
+
+		i = 4;
 		for (B interator : this.values) {
 
 			writter.createRow(i);
@@ -149,11 +178,45 @@ public abstract class AbstractWritterFileIntegration<B extends IBean> {
 		if (!ParameterizedType.class.isAssignableFrom(t.getClass())) {
 
 		}
-		HashMap<Integer, Field> fildsValid = new HashMap<Integer, Field>();
+		HashMap<Integer, Field> fildsValid = this.mapFields.get(model.getClass());
+		if (fildsValid == null) {
+			fildsValid = new HashMap<>();
+		}
 
 		Field[] fields = model.getClass().getDeclaredFields();
 		for (Field f : fields) {
 			Values values = f.getAnnotation(Values.class);
+			if (!java.lang.reflect.Modifier.isStatic(f.getModifiers()) && values != null) {
+				fildsValid.put(values.position(), f);
+				this.mapMethod.put(f, method(model, f.getName()));
+			}
+		}
+
+		this.mapFields.put(model.getClass(), fildsValid);
+
+	}
+
+	/**
+	 * Metodo loadFieldsValid responsável por recuperar os filds validos do
+	 * header
+	 *
+	 * @param model classe que implementa {@link IBean}
+	 * @throws Exception exception
+	 */
+	private void loadHeader(IBean model) throws Exception {
+
+		Type t = this.getClass().getGenericSuperclass();
+		if (!ParameterizedType.class.isAssignableFrom(t.getClass())) {
+
+		}
+		HashMap<Integer, Field> fildsValid = this.mapFields.get(model.getClass());
+		if (fildsValid == null) {
+			fildsValid = new HashMap<>();
+		}
+
+		Field[] fields = model.getClass().getDeclaredFields();
+		for (Field f : fields) {
+			HeaderValues values = f.getAnnotation(HeaderValues.class);
 			if (!java.lang.reflect.Modifier.isStatic(f.getModifiers()) && values != null) {
 				fildsValid.put(values.position(), f);
 				this.mapMethod.put(f, method(model, f.getName()));
@@ -205,15 +268,6 @@ public abstract class AbstractWritterFileIntegration<B extends IBean> {
 		@SuppressWarnings("unchecked")
 		M obj = ((Class<M>) iBean[pos]).newInstance();
 		return obj;
-	}
-
-	/**
-	 * Metodo getListBody que recupera a lista que compoe o body
-	 *
-	 * @return List {@link Body}
-	 */
-	public List<B> getListBody() {
-		return this.bodys;
 	}
 
 }

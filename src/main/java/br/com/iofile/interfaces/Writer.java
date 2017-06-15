@@ -2,6 +2,8 @@ package br.com.iofile.interfaces;
 
 import java.io.IOException;
 
+import br.com.iofile.util.HeaderPrint;
+
 /**
  * Interface para definir os metodos necessarios para escrever os arqivos
  *
@@ -39,4 +41,12 @@ public interface Writer {
 	 * @throws IOException Exception
 	 */
 	public void finish() throws IOException;
+
+	/**
+	 * Mtodo que recupera a linha e posição e insere um novo valor
+	 *
+	 * @param header
+	 */
+	public void print(HeaderPrint header);
+
 }

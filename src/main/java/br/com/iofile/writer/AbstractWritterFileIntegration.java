@@ -127,27 +127,28 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 
 		Writer writter = new WriterExcelFile(this.fileName);
 
-		HeaderBean headerBean = this.header.getClass().getAnnotation(HeaderBean.class);
 		int i = 0;
+		if (this.header != null) {
+			HeaderBean headerBean = this.header.getClass().getAnnotation(HeaderBean.class);
+			IHeaderStrategy headerStrategy = HeaderStrategyEnum.DEFAULT.getStrategy();
+			if (headerBean != null) {
+				i = headerBean.size();
+				headerStrategy = headerBean.headerStrategy().getStrategy();
+			}
 
-		IHeaderStrategy headerStrategy = HeaderStrategyEnum.DEFAULT.getStrategy();
-		if (headerBean != null) {
-			i = headerBean.size();
-			headerStrategy = headerBean.headerStrategy().getStrategy();
-		}
+			// header
+			for (Entry<Integer, Field> entry : this.mapFields.get(this.header.getClass()).entrySet()) {
+				Field f = entry.getValue();
+				Object valueObject = this.mapMethod.get(f).invoke(this.header);
+				HeaderValues values = f.getAnnotation(HeaderValues.class);
+				IFormatterValues<?> formatted = values.formatted().newInstance();
 
-		// header
-		for (Entry<Integer, Field> entry : this.mapFields.get(this.header.getClass()).entrySet()) {
-			Field f = entry.getValue();
-			Object valueObject = this.mapMethod.get(f).invoke(this.header);
-			HeaderValues values = f.getAnnotation(HeaderValues.class);
-			IFormatterValues<?> formatted = values.formatted().newInstance();
+				String value = formatted.format(values.pattern(), valueObject);
+				Integer position = values.position();
+				Integer row = values.row();
 
-			String value = formatted.format(values.pattern(), valueObject);
-			Integer position = values.position();
-			Integer row = values.row();
-
-			writter.print(headerStrategy.processHeader(position, row, value, values.headerName()));
+				writter.print(headerStrategy.processHeader(position, row, value, values.headerName()));
+			}
 		}
 
 		for (B interator : this.values) {

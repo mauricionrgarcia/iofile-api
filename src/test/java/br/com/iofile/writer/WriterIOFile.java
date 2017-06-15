@@ -25,4 +25,15 @@ public class WriterIOFile extends AbstractWritterFileIntegration<HeaderBean, Bod
 	public WriterIOFile(String fileName, HeaderBean header, List<BodyBean> objects) throws Exception {
 		super(fileName, header, objects);
 	}
+
+	/**
+	 * Construtor
+	 *
+	 * @param fileName nome do arquivo
+	 * @param objects lista de objetos
+	 * @throws Exception exception
+	 */
+	public WriterIOFile(String fileName, List<BodyBean> objects) throws Exception {
+		super(fileName, null, objects);
+	}
 }

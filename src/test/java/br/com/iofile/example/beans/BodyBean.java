@@ -17,25 +17,25 @@ import br.com.iofile.interfaces.IBean;
 public class BodyBean implements IBean {
 	private static final long serialVersionUID = 1L;
 
-	@Values(position = 0)
+	@Values(position = 0, title = "Identificação")
 	private String identification;
 
-	@Values(position = 1)
+	@Values(position = 1, title = "Nome")
 	private String name;
 
-	@Values(position = 2)
+	@Values(position = 2, title = "Endereço")
 	private String address;
 
-	@Values(position = 3)
+	@Values(position = 3, title = "Especialidade")
 	private String specialty;
 
-	@Values(position = 4)
+	@Values(position = 4, title = "Documento")
 	private String document;
 
-	@Values(position = 5, formatted = FormatterDate.class, pattern = "dd/MM/yyyy")
+	@Values(position = 5, formatted = FormatterDate.class, pattern = "dd/MM/yyyy", title = "Data")
 	private Date date;
 
-	@Values(position = 6, formatted = FormatterDosh.class)
+	@Values(position = 6, formatted = FormatterDosh.class, title = "Valor")
 	private Double valor;
 
 	@Override

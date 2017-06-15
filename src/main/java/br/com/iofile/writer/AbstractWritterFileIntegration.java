@@ -151,21 +151,40 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 			}
 		}
 
-		for (B interator : this.values) {
+		if (this.values != null && !this.values.isEmpty()) {
 
 			writter.createRow(i);
 
-			for (Entry<Integer, Field> entry : this.mapFields.get(interator.getClass()).entrySet()) {
-				Field f = entry.getValue();
-				Object valueObject = this.mapMethod.get(f).invoke(interator);
-				Values values = f.getAnnotation(Values.class);
-				IFormatterValues<?> formatted = values.formatted().newInstance();
-				String value = formatted.format(values.pattern(), valueObject);
-				Integer position = values.position();
+			Boolean hasTitle = Boolean.FALSE;
 
-				writter.print(position, value);
+			for (Entry<Integer, Field> entry : this.mapFields.get(this.values.get(0).getClass()).entrySet()) {
+				Values values = entry.getValue().getAnnotation(Values.class);
+				if (!values.title().isEmpty()) {
+					hasTitle = Boolean.TRUE;
+					writter.print(values.position(), values.title());
+				}
 			}
-			i++;
+
+			if (hasTitle) {
+				i++;
+			}
+
+			for (B interator : this.values) {
+
+				writter.createRow(i);
+
+				for (Entry<Integer, Field> entry : this.mapFields.get(interator.getClass()).entrySet()) {
+					Field f = entry.getValue();
+					Object valueObject = this.mapMethod.get(f).invoke(interator);
+					Values values = f.getAnnotation(Values.class);
+					IFormatterValues<?> formatted = values.formatted().newInstance();
+					String value = formatted.format(values.pattern(), valueObject);
+					Integer position = values.position();
+
+					writter.print(position, value);
+				}
+				i++;
+			}
 		}
 		writter.finish();
 	}

@@ -35,6 +35,13 @@ public @interface Values {
 	String pattern() default "";
 
 	/**
+	 * Atribtuo que representa o title do objeto
+	 *
+	 * @return pattern
+	 */
+	String title() default "";
+
+	/**
 	 * Atributo que representa o converter <br>
 	 * default {@link DefaultFormatter}
 	 *

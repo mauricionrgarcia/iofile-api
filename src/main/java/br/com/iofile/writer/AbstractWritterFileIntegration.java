@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.imageio.IIOException;
 
@@ -51,7 +51,7 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 	/**
 	 * Atributo responsável por manter os fildes de cada {@link IBean}
 	 */
-	private Map<Class<? extends IBean>, HashMap<Integer, Field>> mapFields;
+	private Map<Class<? extends IBean>, List<Field>> mapFields;
 
 	/**
 	 * Atributo responsavel por manter o metoo de acesso de cada field
@@ -137,8 +137,7 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 			}
 
 			// header
-			for (Entry<Integer, Field> entry : this.mapFields.get(this.header.getClass()).entrySet()) {
-				Field f = entry.getValue();
+			for (Field f : this.mapFields.get(this.header.getClass())) {
 				Object valueObject = this.mapMethod.get(f).invoke(this.header);
 				HeaderValues values = f.getAnnotation(HeaderValues.class);
 				IFormatterValues<?> formatted = values.formatted().newInstance();
@@ -157,8 +156,8 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 
 			Boolean hasTitle = Boolean.FALSE;
 
-			for (Entry<Integer, Field> entry : this.mapFields.get(this.values.get(0).getClass()).entrySet()) {
-				Values values = entry.getValue().getAnnotation(Values.class);
+			for (Field f : this.mapFields.get(this.values.get(0).getClass())) {
+				Values values = f.getAnnotation(Values.class);
 				if (!values.title().isEmpty()) {
 					hasTitle = Boolean.TRUE;
 					writter.print(values.position(), values.title());
@@ -173,8 +172,7 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 
 				writter.createRow(i);
 
-				for (Entry<Integer, Field> entry : this.mapFields.get(interator.getClass()).entrySet()) {
-					Field f = entry.getValue();
+				for (Field f : this.mapFields.get(interator.getClass())) {
 					Object valueObject = this.mapMethod.get(f).invoke(interator);
 					Values values = f.getAnnotation(Values.class);
 					IFormatterValues<?> formatted = values.formatted().newInstance();
@@ -201,16 +199,16 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 		if (!ParameterizedType.class.isAssignableFrom(t.getClass())) {
 
 		}
-		HashMap<Integer, Field> fildsValid = this.mapFields.get(model.getClass());
+		List<Field> fildsValid = this.mapFields.get(model.getClass());
 		if (fildsValid == null) {
-			fildsValid = new HashMap<>();
+			fildsValid = new LinkedList<>();
 		}
 
 		Field[] fields = model.getClass().getDeclaredFields();
 		for (Field f : fields) {
 			Values values = f.getAnnotation(Values.class);
 			if (!java.lang.reflect.Modifier.isStatic(f.getModifiers()) && values != null) {
-				fildsValid.put(values.position(), f);
+				fildsValid.add(f);
 				this.mapMethod.put(f, method(model, f.getName()));
 			}
 		}
@@ -232,16 +230,16 @@ public abstract class AbstractWritterFileIntegration<H extends IBean, B extends 
 		if (!ParameterizedType.class.isAssignableFrom(t.getClass())) {
 
 		}
-		HashMap<Integer, Field> fildsValid = this.mapFields.get(model.getClass());
+		List<Field> fildsValid = this.mapFields.get(model.getClass());
 		if (fildsValid == null) {
-			fildsValid = new HashMap<>();
+			fildsValid = new LinkedList<>();
 		}
 
 		Field[] fields = model.getClass().getDeclaredFields();
 		for (Field f : fields) {
 			HeaderValues values = f.getAnnotation(HeaderValues.class);
 			if (!java.lang.reflect.Modifier.isStatic(f.getModifiers()) && values != null) {
-				fildsValid.put(values.position(), f);
+				fildsValid.add(f);
 				this.mapMethod.put(f, method(model, f.getName()));
 			}
 		}

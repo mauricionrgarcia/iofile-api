@@ -43,6 +43,8 @@ public class TestWriterFile {
 		HeaderBean header = new HeaderBean();
 		header.setName("Mauricio");
 		header.setDtPeriod(new Period(new Date(), new Date()));
+		header.setTypeSearch("CPF");
+		header.setSearchValue("111.111.111-11");
 
 		long initTime = Calendar.getInstance().getTimeInMillis();
 		new WriterIOFile("test.xlsx", header, objects);

@@ -13,7 +13,7 @@ import br.com.iofile.util.Period;
  * @version
  * @sinse 15/06/2017 16:55:29
  */
-@br.com.iofile.annotations.HeaderBean(size = 4, headerStrategy = HeaderStrategyEnum.CONCAT)
+@br.com.iofile.annotations.HeaderBean(size = 4, headerStrategy = HeaderStrategyEnum.NONE)
 public class HeaderBean implements IBean {
 
 	/**
@@ -42,7 +42,7 @@ public class HeaderBean implements IBean {
 	/**
 	 * Atributo que representa o filtro pelo periodo
 	 */
-	@HeaderValues(position = 1, row = 0, headerName = "Período: ", formatted = FormatterPeriod.class)
+	@HeaderValues(position = 2, row = 0, headerName = "Período: ", formatted = FormatterPeriod.class)
 	private Period dtPeriod;
 
 	/**

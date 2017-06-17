@@ -94,12 +94,14 @@ public class WriterExcelFile implements Writer {
 	@Override
 	public void print(HeaderPrint header) {
 
-		this.row = this.sheet.getRow(header.getRowHeader());
+		if (header.getRowHeader() != null) {
+			this.row = this.sheet.getRow(header.getRowHeader());
 
-		if (this.row == null) {
-			createRow(header.getRowHeader());
+			if (this.row == null) {
+				createRow(header.getRowHeader());
+			}
+			print(header.getPositionHeader(), header.getHeaderName());
 		}
-		print(header.getPositionHeader(), header.getHeaderName());
 
 		this.row = this.sheet.getRow(header.getRow());
 

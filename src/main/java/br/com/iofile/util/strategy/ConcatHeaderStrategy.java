@@ -1,17 +1,17 @@
-package br.com.iofile.util;
+package br.com.iofile.util.strategy;
 
 import br.com.iofile.interfaces.IHeaderStrategy;
+import br.com.iofile.util.HeaderPrint;
 
 /**
- * Strategy que define o comportamento padrão<br>
- * HeaderName<br>
- * Value<br>
+ * Strategy que define o comportamento do header concatenado<br>
+ * HeaderName: Value<br>
  *
  * @author <a href="mailto:mauricionrgarcia@gmail.com">Mauricio Garcia</a>
  * @version
  * @sinse 15/06/2017 17:48:32
  */
-public class DefaultHeaderStrategy implements IHeaderStrategy {
+public class ConcatHeaderStrategy implements IHeaderStrategy {
 
 	/*
 	 * (non-Javadoc)
@@ -22,7 +22,7 @@ public class DefaultHeaderStrategy implements IHeaderStrategy {
 	 */
 	@Override
 	public HeaderPrint processHeader(Integer position, Integer row, String value, String headerName) {
-		return new HeaderPrint(position, row + 1, position, row, value, headerName);
+		return new HeaderPrint(position, row, headerName.concat(value));
 	}
 
 }

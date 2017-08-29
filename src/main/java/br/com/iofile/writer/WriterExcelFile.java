@@ -73,7 +73,11 @@ public class WriterExcelFile implements Writer {
 	private void init() throws Exception {
 		this.fos = new FileOutputStream(new File(this.fileName));
 		this.workbook = new HSSFWorkbook();
-		this.sheet = this.workbook.createSheet("Aba1");
+	}
+
+	@Override
+	public void createSection(String name) {
+		this.sheet = this.workbook.createSheet(name);
 	}
 
 	@Override

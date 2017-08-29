@@ -28,7 +28,7 @@ import br.com.iofile.util.Util;
  * @version 1
  * @sinse 15/06/2017 12:40:33
  */
-public abstract class AbstractWritterFileIntegration {
+public abstract class AbstractPositionWritterFileIntegration {
 
 	/**
 	 * Atributo que representa o nome do arquivo gerado
@@ -73,7 +73,7 @@ public abstract class AbstractWritterFileIntegration {
 	 * @param tab Tab
 	 * @throws Exception
 	 */
-	public AbstractWritterFileIntegration(String fileName, ITab tab) throws Exception {
+	public AbstractPositionWritterFileIntegration(String fileName, ITab tab) throws Exception {
 		this.fileName = fileName;
 		this.init();
 		constructFilds(tab);
@@ -89,7 +89,7 @@ public abstract class AbstractWritterFileIntegration {
 	 * @param tab Tab
 	 * @throws Exception
 	 */
-	public AbstractWritterFileIntegration(String fileName, ITab[] tab) throws Exception {
+	public AbstractPositionWritterFileIntegration(String fileName, ITab[] tab) throws Exception {
 		this.fileName = fileName;
 		init();
 		for (ITab iTab : tab) {
@@ -108,7 +108,7 @@ public abstract class AbstractWritterFileIntegration {
 	 * @throws Exception
 	 */
 	@Deprecated
-	public AbstractWritterFileIntegration(String fileName, IBean header, List<IBean> objects) throws Exception {
+	public AbstractPositionWritterFileIntegration(String fileName, IBean header, List<IBean> objects) throws Exception {
 		this.fileName = fileName;
 		this.values = objects;
 		this.header = header;

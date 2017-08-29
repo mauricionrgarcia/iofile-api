@@ -12,7 +12,7 @@ import br.com.iofile.interfaces.ITab;
  * @version
  * @sinse 15/06/2017 13:52:01
  */
-public class WriterIOFile extends AbstractWritterFileIntegration {
+public class WriterPositionIOFile extends AbstractPositionWritterFileIntegration {
 
 	/**
 	 * Construtor
@@ -22,7 +22,7 @@ public class WriterIOFile extends AbstractWritterFileIntegration {
 	 * @param objects lista de objetos
 	 * @throws Exception exception
 	 */
-	public WriterIOFile(String fileName, IBean header, List<IBean> objects) throws Exception {
+	public WriterPositionIOFile(String fileName, IBean header, List<IBean> objects) throws Exception {
 		super(fileName, header, objects);
 	}
 
@@ -33,7 +33,7 @@ public class WriterIOFile extends AbstractWritterFileIntegration {
 	 * @param objects lista de objetos
 	 * @throws Exception exception
 	 */
-	public WriterIOFile(String fileName, List<IBean> objects) throws Exception {
+	public WriterPositionIOFile(String fileName, List<IBean> objects) throws Exception {
 		super(fileName, null, objects);
 	}
 
@@ -44,7 +44,7 @@ public class WriterIOFile extends AbstractWritterFileIntegration {
 	 * @param tab tab que contem as informações da aba
 	 * @throws Exception exception
 	 */
-	public WriterIOFile(String fileName, ITab tab) throws Exception {
+	public WriterPositionIOFile(String fileName, ITab tab) throws Exception {
 		super(fileName, tab);
 	}
 
@@ -55,7 +55,7 @@ public class WriterIOFile extends AbstractWritterFileIntegration {
 	 * @param tab tab que contem as informações da aba
 	 * @throws Exception exception
 	 */
-	public WriterIOFile(String fileName, ITab... tab) throws Exception {
+	public WriterPositionIOFile(String fileName, ITab... tab) throws Exception {
 		super(fileName, tab);
 	}
 }

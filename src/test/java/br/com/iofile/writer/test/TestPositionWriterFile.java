@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import br.com.iofile.example.beans.BodyBean;
 import br.com.iofile.example.beans.HeaderBean;
 import br.com.iofile.example.beans.Tab;
 import br.com.iofile.example.beans.Tab2;
+import br.com.iofile.example.beans.position.BodyBean;
 import br.com.iofile.interfaces.IBean;
 import br.com.iofile.interfaces.ITab;
 import br.com.iofile.util.Period;
@@ -23,7 +23,7 @@ import br.com.iofile.writer.WriterIOFile;
  * @version
  * @sinse 15/06/2017 13:51:16
  */
-public class TestWriterFile {
+public class TestPositionWriterFile {
 
 	/**
 	 * Teste padrao

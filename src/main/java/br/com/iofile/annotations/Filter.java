@@ -18,21 +18,7 @@ import br.com.iofile.interfaces.IFormatterValues;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HeaderValues {
-
-	/**
-	 * Atributo que representa a posicao do objeto
-	 *
-	 * @return posicao
-	 */
-	int position();
-
-	/**
-	 * Atributo que representa a posicao do objeto
-	 *
-	 * @return posicao
-	 */
-	boolean autoPosition() default false;
+public @interface Filter {
 
 	/**
 	 * Atributo que representa a linha do objeto

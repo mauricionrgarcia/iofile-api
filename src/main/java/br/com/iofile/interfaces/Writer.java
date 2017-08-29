@@ -21,6 +21,13 @@ public interface Writer {
 	Writer newInstance(String fileName) throws Exception;
 
 	/**
+	 * Cria uma nova seção (aba)
+	 *
+	 * @param name String que representa o nome da seção
+	 */
+	void createSection(String name);
+
+	/**
 	 * Criar uma nova linha
 	 *
 	 * @param i linha do documento

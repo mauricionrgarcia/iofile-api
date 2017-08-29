@@ -13,7 +13,7 @@ import br.com.iofile.util.Period;
  * @version
  * @sinse 15/06/2017 16:55:29
  */
-@br.com.iofile.annotations.HeaderBean(size = 4, headerStrategy = HeaderStrategyEnum.NONE)
+@br.com.iofile.annotations.Header(size = 4, headerStrategy = HeaderStrategyEnum.CONCAT)
 public class HeaderBean implements IBean {
 
 	/**

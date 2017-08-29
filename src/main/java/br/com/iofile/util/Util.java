@@ -20,18 +20,20 @@ public abstract class Util {
 	private static final String METHOD_WITH_GET = "get";
 
 	/**
+	 * Atributo METHOD_WITH_IS tipo {@link String} que atende ao metodo method
+	 */
+	private static final String METHOD_WITH_IS = "is";
+
+	/**
 	 * Método responspavel por recuperar o method pelo filed Name {@link IBean}
 	 *
-	 * @param model
-	 *            {@link IBean}
-	 * @param fieldName
-	 *            nome do atributo
+	 * @param model {@link IBean}
+	 * @param fieldName nome do atributo
 	 * @return {@link Method}' fildName
-	 * @throws IIOException
-	 *             exception
+	 * @throws IIOException exception
 	 */
-	public static <M extends Object> Method method(M model, String fieldName) throws IIOException {
-		Method[] methods = model.getClass().getDeclaredMethods();
+	public static Method method(Class<? extends IBean> clazz, String fieldName) throws IIOException {
+		Method[] methods = clazz.getDeclaredMethods();
 		for (Method method : methods) {
 			if (method.getName().startsWith(METHOD_WITH_SET) && Modifier.isPublic(method.getModifiers())
 					&& method.getName().toUpperCase().contains(fieldName.toUpperCase())) {
@@ -44,18 +46,16 @@ public abstract class Util {
 	/**
 	 * Método responspavel por recuperar o method pelo filed Name {@link IBean}
 	 *
-	 * @param model
-	 *            {@link IBean}
-	 * @param fieldName
-	 *            nome do atributo
+	 * @param model {@link IBean}
+	 * @param fieldName nome do atributo
 	 * @return {@link Method}' fildName
-	 * @throws IIOException
-	 *             exception
+	 * @throws IIOException exception
 	 */
-	public static <M extends Object> Method methodGet(M model, String fieldName) throws IIOException {
-		Method[] methods = model.getClass().getDeclaredMethods();
+	public static Method methodGet(Class<? extends IBean> clazz, String fieldName) throws IIOException {
+		Method[] methods = clazz.getDeclaredMethods();
 		for (Method method : methods) {
-			if (method.getName().startsWith(METHOD_WITH_GET) && Modifier.isPublic(method.getModifiers())
+			if ((method.getName().startsWith(METHOD_WITH_GET) || method.getName().startsWith(METHOD_WITH_IS))
+					&& Modifier.isPublic(method.getModifiers())
 					&& method.getName().toUpperCase().contains(fieldName.toUpperCase())) {
 				return method;
 			}

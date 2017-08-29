@@ -10,7 +10,7 @@ import br.com.iofile.interfaces.IFormatterValues;
 
 /**
  *
- * Anotation responsavel por fazer o mapeamento do DTO do filto
+ * Anotation responsavel por fazer o mapeamento do DTO para o arquivo
  *
  * @author <a href="mailto:mauricionrgarcia@gmail.com">Mauricio Garcia</a>
  * @version 1
@@ -18,28 +18,7 @@ import br.com.iofile.interfaces.IFormatterValues;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HeaderValues {
-
-	/**
-	 * Atributo que representa a posicao do objeto
-	 *
-	 * @return posicao
-	 */
-	int position();
-
-	/**
-	 * Atributo que representa a posicao do objeto
-	 *
-	 * @return posicao
-	 */
-	boolean autoPosition() default false;
-
-	/**
-	 * Atributo que representa a linha do objeto
-	 *
-	 * @return linha
-	 */
-	int row();
+public @interface Column {
 
 	/**
 	 * Atribtuo que representa o patter de conversao do objeto
@@ -49,18 +28,18 @@ public @interface HeaderValues {
 	String pattern() default "";
 
 	/**
+	 * Atribtuo que representa o title da coluna
+	 *
+	 * @return pattern
+	 */
+	String title() default "";
+
+	/**
 	 * Atributo que representa o converter <br>
 	 * default {@link DefaultFormatter}
 	 *
 	 * @return {@link IFormatterValues} converter
 	 */
 	Class<? extends IFormatterValues<? extends Object>> formatted() default DefaultFormatter.class;
-
-	/**
-	 * Atribtuo que representa o nome do header
-	 *
-	 * @return {@link String} header
-	 */
-	String headerName() default "";
 
 }

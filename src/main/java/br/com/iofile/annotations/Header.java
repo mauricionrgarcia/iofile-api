@@ -16,7 +16,7 @@ import br.com.iofile.enums.HeaderStrategyEnum;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface HeaderBean {
+public @interface Header {
 
 	/**
 	 * Representa o espaco reservado pelo header
